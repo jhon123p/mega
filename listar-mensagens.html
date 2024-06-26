@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Mensagens</title>
+</head>
+<body>
+    <h1>Listagem de Mensagens</h1>
+    <ul id="lista-mensagens"></ul>
+
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkNlRMrjf1p_m8NPBmlVtyG7FUFLEFUi4",
+            authDomain: "mega-50c9b.firebaseapp.com",
+            projectId: "mega-50c9b",
+            storageBucket: "mega-50c9b.appspot.com",
+            messagingSenderId: "429211161041",
+            appId: "1:429211161041:web:a2e70ecc923d756ecc10f0"
+          };
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referência ao Firestore
+        const db = firebase.firestore();
+
+        // Função para carregar e exibir mensagens
+        async function carregarMensagens() {
+            try {
+                const snapshot = await db.collection('users').get();
+                const listaMensagens = document.getElementById('lista-mensagens');
+                
+                snapshot.forEach(doc => {
+                    const mensagem = doc.data();
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <p><strong>Nome:</strong> ${mensagem.nome}</p>
+                        <p><strong>Email:</strong> ${mensagem.email}</p>
+                        <hr>
+                    `;
+                    listaMensagens.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar mensagens:', error);
+            }
+        }
+
+        // Chama a função para carregar mensagens ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarMensagens();
+        });
+    </script>
+</body>
+</html>
